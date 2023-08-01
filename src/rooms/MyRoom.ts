@@ -5,9 +5,9 @@ import {Player} from "./schema/MyRoomState"
 
 export class MyRoom extends Room<MyRoomState> {
   maxClients = 2;
-
   onCreate (options: any) {
     this.setState(new MyRoomState());
+    console.log(this.state.turn, "turn rn")
     /*for (let i = 0; i < 3; i++){
       for (let j = 0; j < 3; j++){
         const cellId = `${i}-${j}`
@@ -16,12 +16,15 @@ export class MyRoom extends Room<MyRoomState> {
       }
     }*/
     this.onMessage("move", (client, message) => {
+      console.log("move made")
       this.makeMove(client.sessionId, message.row, message.col)
     });
   }
 
   makeMove(sessionId: string, row: number, col: number){
     const currentPlayer = this.state.players.get(sessionId)
+    console.log(currentPlayer.symbol)
+    console.log(this.state.turn)
     if (currentPlayer && currentPlayer.symbol === this.state.turn && this.isCellEmpty(row, col)){
       const cellId = `${row}-${col}`
       this.state.board.get(cellId).space = currentPlayer.symbol
@@ -38,6 +41,7 @@ export class MyRoom extends Room<MyRoomState> {
       this.resetBoard()
     }
     this.broadcast("updateBoard", this.state.board.toJSON())
+    this.broadcast("updateTurn", this.state.turn)
   }
 
   isCellEmpty(row: number, col: number){
@@ -105,7 +109,7 @@ export class MyRoom extends Room<MyRoomState> {
     player.symbol = this.state.players.size === 0 ? "X" : "O"
 
     this.state.players.set(client.sessionId, player)
-    console.log(this.state.turn)
+    console.log(player.symbol)
   }
 
   onLeave (client: Client, consented: boolean) {
