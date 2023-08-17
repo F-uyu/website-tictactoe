@@ -1,7 +1,7 @@
 import config from "@colyseus/tools";
 import { monitor } from "@colyseus/monitor";
 import { playground } from "@colyseus/playground";
-
+import { matchMaker } from "colyseus";
 /**
  * Import your Room files
  */
@@ -13,8 +13,7 @@ export default config({
         /**
          * Define your room handlers:
          */
-        gameServer.define('my_room', MyRoom);
-
+        gameServer.define('lol', MyRoom);
     },
 
     initializeExpress: (app) => {
@@ -22,8 +21,15 @@ export default config({
          * Bind your custom express routes here:
          * Read more: https://expressjs.com/en/starter/basic-routing.html
          */
-        app.get("/hello_world", (req, res) => {
-            res.send("It's time to kick ass and chew bubblegum!");
+        app.get("/hello_world",  async (req, res) => {
+            try {
+                const room = await matchMaker.createRoom('lol', { mode: "duo" });
+                console.log(room);
+                res.send(room)
+            } catch (error) {
+                console.error(error);
+                res.status(500).send("Error creating room.");
+            }
         });
 
         /**
