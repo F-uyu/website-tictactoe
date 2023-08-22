@@ -34,7 +34,8 @@ export class MyRoom extends Room<MyRoomState> {
     const tie = this.checkTie()
     if (winner) {
       console.log("winner", winner)
-      this.resetBoard()
+      this.state.turn = `${winner} wins!`
+      //this.resetBoard()
     }
     if (tie) {
       console.log("tie")
