@@ -35,11 +35,14 @@ export class MyRoom extends Room<MyRoomState> {
     if (winner) {
       console.log("winner", winner)
       this.state.turn = `${winner} wins!`
+      this.broadcast("winner", winner)
       //this.resetBoard()
     }
     if (tie) {
       console.log("tie")
-      this.resetBoard()
+      this.state.turn = `It's a tie!`
+      this.broadcast("tie")
+      //this.resetBoard()
     }
     this.broadcast("updateBoard", this.state.board.toJSON())
     this.broadcast("updateTurn", this.state.turn)
