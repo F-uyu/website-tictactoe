@@ -45,7 +45,7 @@ export class MyRoom extends Room<MyRoomState> {
       //this.resetBoard()
     }
     this.broadcast("updateBoard", this.state.board.toJSON())
-    this.broadcast("updateTurn", this.state.turn)
+    //this.broadcast("updateTurn", this.state.turn)
   }
 
   isCellEmpty(row: number, col: number){
